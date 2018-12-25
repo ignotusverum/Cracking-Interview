@@ -8,11 +8,6 @@ let test5 = "g ooodddw d"
 let test6 = "god"
 
 extension String {
-    /// Simplify char count
-    public var length: Int {
-        return characters.count
-    }
-    
     /// If two strings are anagrams, then we know they have the same characters, but in different order
     func sort()-> String {
         let content = utf16.sorted()
@@ -20,11 +15,10 @@ extension String {
     }
 }
 
-
 func permutation(_ string1: String, string2: String)-> Bool {
 
     /// Check if different lengths
-    if string1.length != string2.length {
+    if string1.count != string2.count {
         return false
     }
     
