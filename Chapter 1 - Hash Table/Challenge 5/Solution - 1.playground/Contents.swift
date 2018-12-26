@@ -3,7 +3,7 @@
 import Foundation
 import XCPlayground
 
-var test1 = "aaaaaaaaaab"
+var test1 = "aaaaabaaaaab"
 var test2 = "aaccbvbasdskkksadlfopwo"
 
 var testCases: [String] = {
@@ -23,24 +23,26 @@ extension String {
         
         var result = ""
         var compressDict: [Character: Int] = [:]
-        for (i, c) in self.enumerated() {
+        for (i, c) in enumerated() {
             let nextIndexCheck = i+1 < count ? i+1 : i
-            let nextChar = self[index(self.startIndex, offsetBy: nextIndexCheck)]
+            let nextChar = self[index(startIndex, offsetBy: nextIndexCheck)]
             
-            let resultCheck = compressDict[c] != nil && c == nextChar
-            compressDict[c] = resultCheck ? compressDict[c]! + 1 : 1
+            compressDict[c] = compressDict[c] != nil ? c == nextChar ? compressDict[c]! + 1 : compressDict[c]! + 1 : 1
             
-            if compressDict[c] != nil && c != nextChar || i == count - 1 {
-                let dictResult = compressDict.keys.map { "\($0)\(compressDict[$0]!)" }.joined()
-                result = "\(result)\(dictResult)"
+            if c != nextChar || i == count - 1 {
+                
+                result = "\(result)\(c)\(compressDict[c]!)"
+                compressDict[c] = 0
             }
         }
         
-        compressDict
+        result
         
         return result.count == count ? self : result
     }
 }
 
-test1.manual()
+for test in testCases {
+    test.manual()
+}
 
