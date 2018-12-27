@@ -1,67 +1,27 @@
-/// Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, write a method to rotate the image by 90 degrees. Can you do this in place?
+/*:
+ 1.7 Rotate an NxN matrix
+ */
 
-import UIKit
-import Foundation
-
-struct MatrixImage {
-    let rows: Int
-    let columns: Int
+extension RandomAccessCollection where Iterator.Element: RandomAccessCollection, Iterator.Element.Index == Index, Indices.Iterator.Element == Index {
     
-    var rAngle: Int? = nil
-    var center: IndexPath? = nil
-    
-    var values: [(key: IndexPath, value: String)] = []
-    
-    init(dimension: Int) {
+    func rotated() -> [[Iterator.Element.Iterator.Element]] {
+        precondition(matrix.count == matrix.first?.count, "matrix must be square")
+        let columns = indices.reversed()
+        var rotated: [[Iterator.Element.Iterator.Element]] = []
         
-        self.rows = dimension
-        self.columns = dimension
-    
-        self.center = findCenter()
-        self.values = createMatrix(dimension: dimension)
-    }
-    
-    private func createMatrix(dimension: Int)-> [(key: IndexPath, value: String)] {
-        var result: [IndexPath: String] = [:]
-        for i in 0..<dimension {
-            for j in 0..<dimension {
-                let indexPath = IndexPath(row: j, section: i)
-                result[indexPath] = "^^^^"
+        for column in columns {
+            var rotatedRow: [Iterator.Element.Iterator.Element] = []
+            for row in self {
+                rotatedRow.append(row[column])
             }
+            rotated.append(rotatedRow)
         }
-        
-        return result.sorted(by: { $0.0.section < $1.0.section })
+        return rotated
     }
     
-    private func findCenter()-> IndexPath? {
-        
-        let cv = Int(floor(Double(rows)/2))
-        return rows % 2 == 0 ? nil : IndexPath(item: cv, section: cv)
-    }
 }
 
-
-func display(_ array: [[String]])-> String {
-    var display = ""
-    for (i, r) in array.enumerated() {
-        for c in r {
-            display = "\(display) \(c)"
-        }
-        
-        display = "\(display) \(i != array[i].count - 1 ? "\n" : "")"
-    }
-    
-    return display
-}
-
-func rotate(_ array: [[String]])-> [[String]] {
-    
-    
-    
-    return []
-}
-
-MatrixImage(dimension: 4)
-
-
-
+var matrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]
+var rotated = matrix.rotated()
+let verify = [[4, 8, 12, 16], [3, 7, 11, 15], [2, 6, 10, 14], [1, 5, 9, 13]]
+assert(rotated.elementsEqual(verify) { $0 == $1 })
